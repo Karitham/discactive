@@ -27,7 +27,7 @@ func main() {
 	// Get token from ENV
 	token, ok := os.LookupEnv("DISCORD_TOKEN")
 	if !ok {
-		panic("could not find token in env")
+		log.Panic().Msg("could not find token in env")
 	}
 
 	bot := disc.New(token)
@@ -37,18 +37,24 @@ func main() {
 	// Probably through a PUT endpoint in the future
 
 	if err := bot.LoadUsersFromJSON("assets/user_tracking.json"); err != nil {
-		panic(err)
+		log.Panic().Err(err)
 	}
 
 	// Run the bot
-	bot.RunWithEventChan()
+	err := bot.RunWithEventChan()
+	if err != nil {
+		log.Panic().Err(err)
+	}
 
 	// Here we just range over the events and generate them
 	// This is for convenience
 	for id := range bot.Pres.Event {
 		i := img.New(bot.Pres.Users[id])
 
-		i.Generate()
+		if _, err := i.Generate(); err != nil {
+			log.Err(err).Msg("Error drawing imgage. Impossible for now")
+			continue
+		}
 		log.Trace().Str("User", id.String()).Msg("Generated image")
 
 		f, err := os.Create(bot.Pres.Users[id].User.Username + ".png")

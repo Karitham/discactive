@@ -61,6 +61,7 @@ func (b *Bot) Run() error {
 }
 
 // RunWithEventChan also uses an event channel
+//
 // This is convenient if you want your update
 // to be real-time for example.
 //

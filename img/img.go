@@ -215,7 +215,10 @@ func GenerateBackground() {
 	}
 	defer f.Close()
 
-	png.Encode(f, u.Img)
+	err = png.Encode(f, u.Img)
+	if err != nil {
+		log.Panic().Err(err)
+	}
 }
 
 // drawRect draws a rectangle
