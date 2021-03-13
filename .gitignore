@@ -1,0 +1,7 @@
+.vscode
+.env*
+*.png
+
+assets/user_tracking.json
+
+!assets/template.png
